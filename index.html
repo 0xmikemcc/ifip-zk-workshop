@@ -100,6 +100,7 @@
     background: var(--accent-soft); border: none; border-radius: 8px;
     padding: 10px 18px; cursor: pointer; margin-top: 12px; margin-right: 10px;
   }
+  button.ghost:disabled { color: #a8b3cc; background: #f0f2f6; cursor: not-allowed; }
   .status { margin-top: 18px; border-radius: 10px; padding: 16px 18px; display: none; }
   .status.show { display: block; }
   .status.ok { background: var(--good-soft); border: 1px solid #bfe5cc; }
@@ -149,20 +150,79 @@
   .timing { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 8px; }
   footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
   a { color: var(--accent); }
+
+  /* missions */
+  #pill {
+    position: fixed; top: 14px; right: 14px; z-index: 50;
+    background: var(--ink); color: #fff; border-radius: 999px;
+    padding: 8px 16px; font-size: 14px; font-weight: 700;
+    box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  }
+  #pill.all { background: var(--good); }
+  .missions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .mission {
+    display: flex; gap: 10px; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+  }
+  .mission .mk {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid #c9cfdb; display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: var(--muted); margin-top: 2px;
+  }
+  .mission.done { border-color: #bfe5cc; background: var(--good-soft); }
+  .mission.done .mk { border-color: var(--good); background: var(--good); color: #fff; }
+  .mission .mt { font-size: 14.5px; line-height: 1.4; }
+  .mission .mt b { display: block; font-size: 15px; }
+  .mission .pace { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  @media (max-width: 640px) { .missions { grid-template-columns: 1fr; } }
+
+  /* predictions */
+  .predict {
+    border: 1.5px dashed #c9cfdb; border-radius: 10px;
+    padding: 14px 16px; margin-top: 16px; background: #fcfdff;
+  }
+  .predict .pq { font-weight: 700; font-size: 15px; display: block; margin-bottom: 10px; }
+  .predict .pq::before { content: "🔮 "; }
+  .popt {
+    display: block; width: 100%; text-align: left; font-size: 14.5px;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 8px;
+    padding: 9px 12px; margin-top: 7px; cursor: pointer; color: var(--ink);
+    font-family: inherit;
+  }
+  .popt:hover { border-color: var(--accent); }
+  .popt.chosen { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .predict.revealed .popt { cursor: default; opacity: 0.75; }
+  .predict.revealed .popt.right { border-color: var(--good); background: var(--good-soft); opacity: 1; font-weight: 700; }
+  .predict.revealed .popt.chosen:not(.right) { border-color: var(--bad); background: var(--bad-soft); opacity: 1; }
+  .predict .reveal { display: none; margin-top: 10px; font-size: 14px; }
+  .predict.revealed .reveal { display: block; }
+
+  textarea.paste {
+    width: 100%; min-height: 110px; font-family: var(--mono); font-size: 12px;
+    border: 2px solid var(--line); border-radius: 10px; padding: 12px;
+    margin-top: 12px; resize: vertical; color: var(--ink); background: #fff;
+  }
+  textarea.paste:focus { outline: none; border-color: var(--accent); }
+  .disc { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .disc .panel { min-width: 0; }
   @media (max-width: 640px) {
     h1 { font-size: 30px; }
     .lede { font-size: 17px; }
     section.step { padding: 20px 18px; }
+    .disc { grid-template-columns: 1fr; }
   }
+  @media (max-width: 900px) { #pill { top: auto; bottom: 14px; } }
 </style>
 </head>
 <body>
+<div id="pill">Missions 0 / 8</div>
 <div class="wrap">
 
 <header class="masthead">
   <div class="kicker">IFIP Summer School on Privacy and Identity Management · Leuven 2026 · hands-on session</div>
   <h1>Prove it without revealing it</h1>
-  <p class="lede">In the next half hour you will generate and verify a real zero-knowledge proof, in this browser tab, of the statement <em>"I am old enough"</em> - without the verifier ever learning your age.</p>
+  <p class="lede">Eight missions, about 35 minutes. You will generate, verify, transplant, and try very hard to break real zero-knowledge proofs - in this tab, of the statement <em>"I am old enough"</em> - without the verifier ever learning your age.</p>
   <span class="offline-note">Everything runs locally on this page. After it loads, no network is needed and no data leaves your device.</span>
 </header>
 
@@ -174,7 +234,23 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">2</span> Your secret</div>
+  <div class="step-tag"><span class="n">2</span> Your missions</div>
+  <h2>Eight missions - the last one needs a neighbour</h2>
+  <p>Work at your own pace; the minute marks are a suggestion. Boxes tick themselves as you complete each mission. Prediction boxes (🔮) appear before the interesting moments - <b>commit to a guess before you click</b>. Being wrong is the productive outcome.</p>
+  <div class="missions">
+    <div class="mission" id="m1"><span class="mk">1</span><span class="mt"><b>Prove you're old enough</b>Generate your first proof. <span class="pace">min 0-6</span></span></div>
+    <div class="mission" id="m2"><span class="mk">2</span><span class="mt"><b>Verify as the website</b>Check the proof you just made. <span class="pace">min 0-6</span></span></div>
+    <div class="mission" id="m3"><span class="mk">3</span><span class="mt"><b>Prove the same thing twice</b>Same numbers, second proof. Compare the bytes. <span class="pace">min 6-11</span></span></div>
+    <div class="mission" id="m4"><span class="mk">4</span><span class="mt"><b>Try to lie</b>Age 15. See what the system does with a false statement. <span class="pace">min 11-16</span></span></div>
+    <div class="mission" id="m5"><span class="mk">5</span><span class="mt"><b>Walk the boundary</b>Exactly 18. Precisely the minimum. <span class="pace">min 11-16</span></span></div>
+    <div class="mission" id="m6"><span class="mk">6</span><span class="mt"><b>Forge a proof</b>Corrupt one byte, as an interceptor would. <span class="pace">min 16-22</span></span></div>
+    <div class="mission" id="m7"><span class="mk">7</span><span class="mt"><b>Move the goalposts</b>Verify a valid proof against the wrong rule. <span class="pace">min 16-22</span></span></div>
+    <div class="mission" id="m8"><span class="mk">8</span><span class="mt"><b>Swap proofs with a neighbour</b>Export yours, verify theirs. Two humans, one proof, zero secrets. <span class="pace">min 22-33</span></span></div>
+  </div>
+</section>
+
+<section class="step">
+  <div class="step-tag"><span class="n">3</span> Your secret</div>
   <h2>Pick the numbers</h2>
   <p>Two numbers go into this proof. One is <b>private</b> - it is your secret, and it will never appear in anything you send. One is <b>public</b> - both sides agree on it and the verifier sees it.</p>
   <div class="inputs-row">
@@ -188,14 +264,8 @@
     </div>
   </div>
   <p class="small muted" style="margin-top:14px">Sceptical that the age stays local? Open your browser's developer tools, watch the network tab, and run everything below. You will see zero requests.</p>
-</section>
-
-<section class="step">
-  <div class="step-tag"><span class="n">3</span> The rules</div>
-  <h2>The circuit: rules written in arithmetic</h2>
-  <p>A zero-knowledge proof always proves the same kind of thing: <em>"I know secret numbers that satisfy these agreed rules."</em> The rules are written as a <b>circuit</b> - a small program compiled down to arithmetic equations (this one becomes just 8 of them). Here is the complete source of the circuit you are about to use:</p>
   <details>
-    <summary>Show the circuit source (Circom language)</summary>
+    <summary>Show the rules being proved (the circuit, in the Circom language)</summary>
     <pre class="codeblock"><span class="kw">pragma</span> circom 2.1.9;
 
 <span class="kw">include</span> "comparators.circom";
@@ -230,14 +300,23 @@
 
 <span class="kw">component</span> main {public [threshold]} = AgeCheck();
 </pre>
+    <div class="callout">The key line is <code class="inline">ok === 1</code>. It makes "age is at least the minimum" a <em>rule of the system</em>, not a claim. If the rule does not hold, no valid proof exists - there is nothing to fake. Mission 4 tests exactly this.</div>
   </details>
-  <div class="callout">The key line is <code class="inline">ok === 1</code>. It makes "age is at least the minimum" a <em>rule of the system</em>, not a claim. If the rule does not hold, no valid proof exists - there is nothing to fake. You will see this for yourself in step 6.</div>
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">4</span> Prove</div>
+  <div class="step-tag"><span class="n">4</span> Missions 1-3 · Prove</div>
   <h2>Generate the proof</h2>
   <p>Your browser will now do real cryptography: it feeds your two numbers through the circuit, then builds a <b>Groth16 proof</b> - the same proof system securing billions of dollars on public blockchains - using elliptic-curve mathematics. No cloud, no server: the prover is you.</p>
+
+  <div class="predict" id="p1">
+    <span class="pq">Prediction 1 - what will the website actually receive?</span>
+    <button class="popt" data-p="p1" data-k="a">My age, encrypted so that only the website can decrypt it</button>
+    <button class="popt" data-p="p1" data-k="b">Only the minimum-age rule, plus opaque curve points that encode no personal data</button>
+    <button class="popt" data-p="p1" data-k="c">Nothing readable at all - both numbers stay hidden from everyone</button>
+    <div class="reveal"></div>
+  </div>
+
   <button class="run" id="btnProve">Generate my proof</button>
   <div class="status" id="proveStatus"></div>
   <div id="proofOut" style="display:none">
@@ -253,11 +332,17 @@
         <p class="small muted" style="margin-top:8px">Just the minimum-age rule. Your age is not in the proof, not in the public signals, not derivable from either. Those large numbers are coordinates of points on an elliptic curve - they function as sealed evidence, not as an envelope containing your data.</p>
       </div>
     </div>
+    <div class="exp" id="againBox">
+      <b>Mission 3 - prove the same statement again.</b>
+      Same age, same minimum. Before you click: will the second proof be identical to the first?
+      <br><button class="ghost" id="btnAgain">Prove the same thing again</button>
+      <div class="status" id="againStatus"></div>
+    </div>
   </div>
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">5</span> Verify</div>
+  <div class="step-tag"><span class="n">5</span> Mission 2 · Verify</div>
   <h2>Check the proof - as the website would</h2>
   <p>Now switch roles. You are the website. You received the proof and the public signals above - nothing else. Checking them requires only the circuit's <b>verification key</b> (public, embedded in this page) and a few milliseconds:</p>
   <button class="run" id="btnVerify" disabled>Verify the proof</button>
@@ -285,21 +370,42 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">6</span> Break it</div>
+  <div class="step-tag"><span class="n">6</span> Missions 4-7 · Break it</div>
   <h2>Try to cheat</h2>
-  <p>A security claim you cannot attack is a security claim you cannot trust. Three experiments, in increasing order of deviousness:</p>
+  <p>A security claim you cannot attack is a security claim you cannot trust. Four attacks, in increasing order of deviousness. Predict first, then attack.</p>
+
   <div class="exp">
-    <b>Experiment A - lie about your age.</b>
-    Scroll up, set your age to <code class="inline">15</code>, and generate again. Proof generation itself fails: with a false statement, no witness satisfies the equations, so there is no proof to send. Then try exactly <code class="inline">18</code> - the boundary case passes.
+    <b>Mission 4 - lie about your age.</b>
+    <div class="predict" id="p2">
+      <span class="pq">Prediction 2 - set your age to 15 and click Generate. What happens?</span>
+      <button class="popt" data-p="p2" data-k="a">A proof is produced, but verification will fail</button>
+      <button class="popt" data-p="p2" data-k="b">No proof can be produced at all</button>
+      <button class="popt" data-p="p2" data-k="c">A valid proof is produced - the mathematics cannot know the claim is false</button>
+      <div class="reveal"></div>
+    </div>
+    <p class="small" style="margin-top:10px">Now scroll up, set your age to <code class="inline">15</code>, and generate. Then come back here.</p>
   </div>
+
   <div class="exp">
-    <b>Experiment B - forge the proof.</b>
-    Take a valid proof and corrupt one byte, as an attacker who intercepted it might.
-    <br><button class="ghost" id="btnTamper" disabled>Flip one byte in my proof, then re-verify</button>
+    <b>Mission 5 - walk the boundary.</b>
+    Set your age to exactly <code class="inline">18</code> with minimum 18 and generate. Off-by-one errors are where verification systems die; check where this one draws its line. (Then put your age back to something comfortable and generate once more - missions 6-8 need a valid proof.)
+  </div>
+
+  <div class="exp">
+    <b>Mission 6 - forge the proof.</b>
+    <div class="predict" id="p3">
+      <span class="pq">Prediction 3 - one byte of a valid proof gets changed in transit. Verification will...</span>
+      <button class="popt" data-p="p3" data-k="a">Fail - a proof is all-or-nothing</button>
+      <button class="popt" data-p="p3" data-k="b">Pass, but flag a warning</button>
+      <button class="popt" data-p="p3" data-k="c">Depend on which byte was changed</button>
+      <div class="reveal"></div>
+    </div>
+    <button class="ghost" id="btnTamper" disabled>Flip one byte in my proof, then re-verify</button>
     <div class="status" id="tamperStatus"></div>
   </div>
+
   <div class="exp">
-    <b>Experiment C - move the goalposts.</b>
+    <b>Mission 7 - move the goalposts.</b>
     Verify your valid proof against a different public rule than the one it was made for. The proof is cryptographically bound to its exact statement.
     <br><button class="ghost" id="btnGoalpost" disabled>Re-verify my proof against a different minimum</button>
     <div class="status" id="goalpostStatus"></div>
@@ -307,16 +413,46 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">7</span> The honest fine print</div>
+  <div class="step-tag"><span class="n">7</span> Mission 8 · Swap with a neighbour</div>
+  <h2>Two humans, one proof, zero secrets</h2>
+  <p>So far you played both sides. Now do it for real: <b>export your proof and hand it to a neighbour</b> - message it, AirDrop it, or read it out if you enjoy suffering. They paste it below and verify it. They will learn that your statement is true and which rule it satisfies. They will not learn your age - and no amount of staring at the blob will change that.</p>
+  <div class="two-col">
+    <div class="panel">
+      <h4>A · Export your proof</h4>
+      <p class="small muted">One compact blob: the proof plus its public signals.</p>
+      <button class="ghost" id="btnExport" disabled>Copy my proof to the clipboard</button>
+      <textarea class="paste" id="exportBox" readonly placeholder="Generate a proof first (mission 1), then export it here."></textarea>
+    </div>
+    <div class="panel sees">
+      <h4>B · Verify a neighbour's proof</h4>
+      <p class="small muted">Paste what they sent you, then verify. You are now their verifier.</p>
+      <textarea class="paste" id="importBox" placeholder="Paste a neighbour's exported proof here..."></textarea>
+      <button class="ghost" id="btnImport">Verify their proof</button>
+      <div class="status" id="importStatus"></div>
+    </div>
+  </div>
+  <div class="callout">While you have their proof in front of you: try to work out how old your neighbour is. You have the complete artifact. This impossibility - not the green checkmark - is the whole point of the session.</div>
+</section>
+
+<section class="step">
+  <div class="step-tag"><span class="n">8</span> The honest fine print</div>
   <h2>What this toy leaves out - and where the real fights are</h2>
   <p>This demo proves you know <em>a</em> number that is at least 18. It does not prove that number is really your age - you typed it in. Production systems close that gap with an <b>issuer signature</b>: a government or bank signs your credential, and the circuit additionally proves "this age carries a valid signature from an issuer the verifier trusts", still without revealing it. The cryptography is the same; the circuit is bigger.</p>
-  <p>That one missing piece is where most of the open questions live - and they are not all technical:</p>
-  <ul style="margin: 12px 0 0 22px">
-    <li style="margin-top:6px"><b>Who gets to be an issuer</b>, and can they see where you use your credential? (Unlinkability is a design choice, not a given.)</li>
-    <li style="margin-top:6px"><b>Revocation:</b> how do you cancel a stolen credential without building a phone-home surveillance channel?</li>
-    <li style="margin-top:6px"><b>Trusted setup:</b> the proving keys on this page came from a ceremony. Who ran it, and why should you believe them?</li>
-    <li style="margin-top:6px"><b>Legal status:</b> is a ZK proof of an attribute "processing of personal data" under the GDPR? Does data minimisation as national security change the answer?</li>
-  </ul>
+  <p>That one missing piece is where most of the open questions live - and they are not all technical. A starter, by discipline:</p>
+  <div class="disc">
+    <div class="panel">
+      <h4>If you work in law</h4>
+      <p class="small">Your neighbour verified a proof about you in mission 8. Did they "process personal data" under the GDPR? Defend either answer.</p>
+    </div>
+    <div class="panel">
+      <h4>If you work in HCI</h4>
+      <p class="small">You just used a UI where being unable to see the secret is the security property. How would you convey "this is working" to someone who cannot inspect why?</p>
+    </div>
+    <div class="panel">
+      <h4>If you work in policy / economics</h4>
+      <p class="small">The proving keys on this page came from a ceremony run by one person (the speaker). What institution would you trust to run it for 450 million EU citizens?</p>
+    </div>
+  </div>
   <p style="margin-top:14px">These same primitives - circuits, witnesses, proofs, verification keys - compose into systems far larger than an age check: the EUDI Wallet's <a href="https://github.com/eu-digital-identity-wallet/av-lib-android-zkp-age-icao" target="_blank" rel="noopener">age-proof library</a>, Swiss SWIYU selective disclosure, and the deployed privacy protocol we walk through next.</p>
 </section>
 
@@ -448,15 +584,62 @@ const zkeyMem = { type: "mem", data: b64ToU8(ZKEY_B64) };
 
 let currentProof = null;
 let currentPublic = null;
+let lastInputs = null;
 
 const $ = (id) => document.getElementById(id);
 
+/* ---------- missions ---------- */
+const missions = new Set();
+function done(n) {
+  if (missions.has(n)) return;
+  missions.add(n);
+  $("m" + n).classList.add("done");
+  const pill = $("pill");
+  pill.textContent = "Missions " + missions.size + " / 8";
+  if (missions.size === 8) {
+    pill.classList.add("all");
+    pill.textContent = "Missions 8 / 8 🎉";
+  }
+}
+
+/* ---------- predictions ---------- */
+const CORRECT = { p1: "b", p2: "b", p3: "a" };
+const REVEAL_TEXT = {
+  p1: "The verifier receives the proof (curve points; no personal data recoverable) plus the public signals - here, only the minimum-age rule. Your age is in neither.",
+  p2: "No proof exists for a false statement. Proving does not produce a bad proof - it fails outright, because the circuit's equations have no solution.",
+  p3: "All-or-nothing. There is no such thing as a slightly wrong proof - any change, anywhere, and verification returns false."
+};
+const predicted = {};
+document.querySelectorAll(".popt").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const p = btn.dataset.p;
+    if (document.getElementById(p).classList.contains("revealed")) return;
+    predicted[p] = btn.dataset.k;
+    document.querySelectorAll('.popt[data-p="' + p + '"]').forEach(b => b.classList.remove("chosen"));
+    btn.classList.add("chosen");
+  });
+});
+function revealPrediction(p) {
+  const box = $(p);
+  if (box.classList.contains("revealed")) return;
+  box.classList.add("revealed");
+  document.querySelectorAll('.popt[data-p="' + p + '"]').forEach(b => {
+    if (b.dataset.k === CORRECT[p]) b.classList.add("right");
+  });
+  const chose = predicted[p];
+  const verdict = chose === undefined ? "You didn't lock in a guess - next time, commit first."
+    : chose === CORRECT[p] ? "You predicted it. " : "Not what you predicted - that surprise is worth keeping. ";
+  box.querySelector(".reveal").innerHTML = "<b>" + verdict + "</b>" + REVEAL_TEXT[p];
+}
+
+/* ---------- helpers ---------- */
 function setStatus(el, kind, title, body) {
   el.className = "status show " + kind;
   el.innerHTML = "<h3>" + title + "</h3>" + (body ? "<p class='small'>" + body + "</p>" : "");
 }
 function clearStatus(el) { el.className = "status"; el.innerHTML = ""; }
 
+/* ---------- prove ---------- */
 $("btnProve").addEventListener("click", async () => {
   const age = parseInt($("age").value, 10);
   const threshold = parseInt($("threshold").value, 10);
@@ -466,8 +649,10 @@ $("btnProve").addEventListener("click", async () => {
   $("verifierPanels").style.display = "none";
   clearStatus($("tamperStatus"));
   clearStatus($("goalpostStatus"));
+  clearStatus($("againStatus"));
   currentProof = null; currentPublic = null;
-  $("btnVerify").disabled = true; $("btnTamper").disabled = true; $("btnGoalpost").disabled = true;
+  $("btnVerify").disabled = true; $("btnTamper").disabled = true;
+  $("btnGoalpost").disabled = true; $("btnExport").disabled = true;
 
   if (!(age >= 0 && age <= 130) || !(threshold >= 1 && threshold <= 130)) {
     setStatus(st, "err", "Please use realistic numbers", "Age 0-130 and minimum 1-130 keep us inside the circuit's 8-bit range.");
@@ -483,6 +668,8 @@ $("btnProve").addEventListener("click", async () => {
     );
     const ms = Math.round(performance.now() - t0);
     currentProof = proof; currentPublic = publicSignals;
+    lastInputs = { age, threshold };
+    revealPrediction("p1");
     setStatus(st, "ok", "Proof generated",
       "A statement about the number " + age + " now exists as cryptographic evidence that never contains the number " + age + ".");
     $("proveTiming").textContent = "proved in " + ms + " ms, entirely in this tab";
@@ -490,15 +677,45 @@ $("btnProve").addEventListener("click", async () => {
     $("publicJson").textContent = JSON.stringify({ "minimum age required": publicSignals[0] }, null, 2);
     $("proofOut").style.display = "block";
     $("btnVerify").disabled = false;
+    $("btnExport").disabled = false;
     document.querySelectorAll(".thVal").forEach(e => e.textContent = threshold);
+    done(1);
+    if (age === threshold) done(5);
   } catch (e) {
+    revealPrediction("p2");
     setStatus(st, "err", "No proof exists for these numbers",
       "Witness generation failed: age " + age + " does not satisfy the rule “age ≥ " + threshold +
       "”, so the circuit's equations have no solution. This is the point - when the statement is false, there is nothing to prove and nothing to fake. (Internal error: <code class='inline'>Assert Failed</code> in the circuit.)");
+    done(4);
   }
   $("btnProve").disabled = false;
 });
 
+/* ---------- mission 3: prove again ---------- */
+$("btnAgain").addEventListener("click", async () => {
+  if (!lastInputs || !currentProof) return;
+  const st = $("againStatus");
+  $("btnAgain").disabled = true;
+  setStatus(st, "busy", "Proving the identical statement again...");
+  try {
+    const first = JSON.stringify(currentProof);
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+      { age: lastInputs.age, threshold: lastInputs.threshold }, wasmMem, zkeyMem
+    );
+    const identical = JSON.stringify(proof) === first;
+    const ok = await snarkjs.groth16.verify(VKEY, publicSignals, proof);
+    setStatus(st, identical ? "err" : "ok",
+      identical ? "Identical proofs (tell the speaker - this should not happen!)" : "Completely different bytes. Both valid.",
+      "Same age, same rule, same circuit - yet the two proofs share none of their coordinates, because proving is deliberately randomised. Second proof verifies: <b>" + ok +
+      "</b>. Consequence worth sitting with: even someone who has seen one of your proofs cannot recognise another one as yours. Unlinkability is not an add-on; it falls out of the mathematics.");
+    if (!identical) done(3);
+  } catch (e) {
+    setStatus(st, "err", "Proving failed", "Unexpected: " + String(e).slice(0, 140));
+  }
+  $("btnAgain").disabled = false;
+});
+
+/* ---------- verify ---------- */
 $("btnVerify").addEventListener("click", async () => {
   if (!currentProof) return;
   const t0 = performance.now();
@@ -513,8 +730,10 @@ $("btnVerify").addEventListener("click", async () => {
   $("verifierPanels").style.display = ok ? "flex" : "none";
   $("btnTamper").disabled = !ok;
   $("btnGoalpost").disabled = !ok;
+  if (ok) done(2);
 });
 
+/* ---------- mission 6: tamper ---------- */
 $("btnTamper").addEventListener("click", async () => {
   if (!currentProof) return;
   const st = $("tamperStatus");
@@ -522,12 +741,15 @@ $("btnTamper").addEventListener("click", async () => {
   // nudge one coordinate of the first curve point by 1
   tampered.pi_a[0] = (BigInt(tampered.pi_a[0]) + 1n).toString();
   const ok = await snarkjs.groth16.verify(VKEY, currentPublic, tampered);
+  revealPrediction("p3");
   setStatus(st, ok ? "err" : "ok",
     ok ? "Unexpected: tampered proof verified (tell the speaker!)" : "Rejected",
     "One coordinate of the proof was changed by the smallest possible amount (+1). Verification result: <b>" +
     (ok ? "valid" : "invalid") + "</b>. There is no such thing as a slightly wrong proof.");
+  if (!ok) done(6);
 });
 
+/* ---------- mission 7: goalposts ---------- */
 $("btnGoalpost").addEventListener("click", async () => {
   if (!currentProof) return;
   const st = $("goalpostStatus");
@@ -538,6 +760,53 @@ $("btnGoalpost").addEventListener("click", async () => {
     ok ? "Unexpected: proof verified against the wrong rule (tell the speaker!)" : "Rejected",
     "Your proof was created for the public rule “minimum " + realTh + "” and checked against “minimum " + wrongTh + "”. Verification result: <b>" +
     (ok ? "valid" : "invalid") + "</b>. A proof is bound to its exact public statement - it cannot be replayed against a different one.");
+  if (!ok) done(7);
+});
+
+/* ---------- mission 8: export / import ---------- */
+$("btnExport").addEventListener("click", async () => {
+  if (!currentProof) return;
+  const blob = btoa(JSON.stringify({ p: currentProof, s: currentPublic }));
+  $("exportBox").value = blob;
+  try {
+    await navigator.clipboard.writeText(blob);
+    $("btnExport").textContent = "Copied ✓ - now send it to a neighbour";
+  } catch (e) {
+    $("exportBox").select();
+    $("btnExport").textContent = "Clipboard blocked - copy from the box below";
+  }
+  setTimeout(() => { $("btnExport").textContent = "Copy my proof to the clipboard"; }, 4000);
+});
+
+$("btnImport").addEventListener("click", async () => {
+  const st = $("importStatus");
+  const raw = $("importBox").value.trim();
+  if (!raw) { setStatus(st, "err", "Nothing to verify", "Paste a neighbour's exported proof first."); return; }
+  let parsed;
+  try {
+    parsed = JSON.parse(atob(raw));
+    if (!parsed.p || !parsed.s) throw new Error("missing fields");
+  } catch (e) {
+    setStatus(st, "err", "That is not a proof blob",
+      "Could not decode it. Make sure the whole blob was copied - every character matters (as mission 6 demonstrated).");
+    return;
+  }
+  try {
+    const ok = await snarkjs.groth16.verify(VKEY, parsed.s, parsed.p);
+    if (ok) {
+      setStatus(st, "ok", "Their proof is VALID",
+        "You just verified, with mathematical certainty, that your neighbour's secret number is at least <b>" + parsed.s[0] +
+        "</b> - and you have learned nothing else about them. You did not need to trust them, this page, or any third party: only the public verification key.");
+      done(8);
+    } else {
+      setStatus(st, "err", "INVALID",
+        "Decoded fine, but the proof does not verify. Either it was corrupted in transit - or your neighbour is testing you with a forgery. Ask them.");
+      done(8);
+    }
+  } catch (e) {
+    setStatus(st, "err", "Verification error",
+      "The blob decoded but is not structured like a Groth16 proof. Ask your neighbour to re-export.");
+  }
 });
 </script>
 </body>
