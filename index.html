@@ -237,12 +237,12 @@
   <div class="exp"><b class="eh">Attack B - forge.</b> Edit the proof below yourself - change a digit, swap two numbers, anything - as an interceptor tampering in transit would, then verify it.
     <textarea class="paste" id="tamperBox" placeholder="Generate a proof first (exercise 1), then edit it here."></textarea>
     <br><button class="ghost" id="btnTamper" disabled>Verify my edited proof</button>
-    <span class="small muted" id="tamperHint" style="margin-left:10px">Generate and verify a proof above first - that's what unlocks this</span>
+    <span class="small muted" id="tamperHint" style="margin-left:10px">Generate a proof above first (exercise 1) - that's what gets edited here</span>
     <div class="status" id="tamperStatus"></div></div>
   <div class="exp"><b class="eh">Attack C - substitute the public input.</b> Verification never re-runs the circuit - so pick any minimum you like and re-check your same proof against it.
     <br>Verify against minimum <input class="small-num" id="goalpostInput" type="number" value="21">
     <button class="ghost" id="btnGoalpost" disabled style="margin-left:8px">Re-verify against that minimum</button>
-    <span class="small muted" id="goalpostHint" style="margin-left:10px">Generate and verify a proof above first - that's what unlocks this</span>
+    <span class="small muted" id="goalpostHint" style="margin-left:10px">Generate a proof above first (exercise 1) - that's what gets re-checked here</span>
     <div class="status" id="goalpostStatus"></div></div>
   <details style="margin-top:16px">
     <summary>Show why these actually fail (the mechanism behind VALID / INVALID)</summary>
@@ -506,6 +506,9 @@ $("btnProve").addEventListener("click", async ()=>{
     $("proofJson").textContent=JSON.stringify(proof,null,2);
     $("publicJson").textContent=JSON.stringify({"minimum age required":publicSignals[0]},null,2);
     $("proofOut").style.display="block"; done(1);
+    $("btnTamper").disabled=false; $("btnGoalpost").disabled=false;
+    $("tamperHint").style.display="none"; $("goalpostHint").style.display="none";
+    $("tamperBox").value=JSON.stringify(proof,null,2);
   }catch(e){
     revealPrediction("p2");
     setStatus(st,"err","No proof exists for these numbers","Witness generation failed: age "+age+" does not satisfy “age ≥ "+threshold+"”, so the equations have no solution. When the statement is false there is nothing to prove and nothing to fake."); done(4);
@@ -518,9 +521,6 @@ $("btnVerify").addEventListener("click", async ()=>{
   setVerdict($("verdict"),$("verdictWord"),$("verdictWhy"),ok,ok?"VALID":"INVALID",
     ok?"<b>Verified in "+ms+" ms.</b> Checked: does this proof satisfy “age ≥ "+agePublic[0]+"”? The verifier tested the proof's curve points against that public rule and the fixed verification key - a constant algebraic check, not a re-run of the comparison. It can only pass if a real witness (an actual age ≥ "+agePublic[0]+") was used to build the proof - that's what makes “VALID” trustworthy here, not just a label.":"Does not check out.");
   $("verdictCall").textContent='snarkjs.groth16.verify(vkey, ["'+agePublic[0]+'"], proof) → '+ok;
-  $("btnTamper").disabled=!ok; $("btnGoalpost").disabled=!ok;
-  $("tamperHint").style.display=ok?"none":"inline"; $("goalpostHint").style.display=ok?"none":"inline";
-  if(ok){ $("tamperBox").value=JSON.stringify(ageProof,null,2); }
   if(ok)done(2);
 });
 $("btnAgain").addEventListener("click", async ()=>{
