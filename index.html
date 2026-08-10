@@ -79,6 +79,10 @@
   .exp b.eh { display: block; margin-bottom: 3px; }
   .callout { border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0;
     padding: 14px 18px; margin-top: 16px; font-size: 15.5px; }
+  .theory { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+    padding: 9px 14px; margin-top: 14px; font-size: 14px; color: var(--muted); background: #fff; }
+  .theory .tk { display: block; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
   details { margin-top: 14px; } details summary { cursor: pointer; font-weight: 700; font-size: 15px; color: var(--accent); }
   .timing { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 8px; }
   footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
@@ -133,14 +137,14 @@
 <header class="masthead">
   <div class="kicker">IFIP Summer School on Privacy and Identity Management · Leuven 2026 · hands-on session</div>
   <h1>Prove it without revealing it</h1>
-  <p class="lede">Three acts, nine missions, about 40 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
+  <p class="lede">Three acts, nine missions, about 25 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
   <span class="offline-note">Everything runs locally. After the page loads, no network is needed and no data leaves your device.</span>
 
   <div class="missions" style="margin-top:24px">
     <div class="mission" id="m1"><span class="mk">1</span><span class="mt"><b>Prove you're old enough</b>Range proof: age ≥ 18.<span class="mact">Act I</span></span></div>
     <div class="mission" id="m2"><span class="mk">2</span><span class="mt"><b>Verify it</b>Check your own proof.<span class="mact">Act I</span></span></div>
     <div class="mission" id="m3"><span class="mk">3</span><span class="mt"><b>Prove it twice</b>Same claim, different bytes.<span class="mact">Act I</span></span></div>
-    <div class="mission" id="m4"><span class="mk">4</span><span class="mt"><b>Attack the proof</b>Lie, forge, replay - all rejected.<span class="mact">Act I</span></span></div>
+    <div class="mission" id="m4"><span class="mk">4</span><span class="mt"><b>Attack the proof</b>Lie, forge, substitute the public input - all rejected.<span class="mact">Act I</span></span></div>
     <div class="mission" id="m5"><span class="mk">5</span><span class="mt"><b>Prove set membership</b>"I'm in the approved set" - not which member.<span class="mact">Act II</span></span></div>
     <div class="mission" id="m6"><span class="mk">6</span><span class="mt"><b>Watch what leaks</b>Two members, one indistinguishable proof.<span class="mact">Act II</span></span></div>
     <div class="mission" id="m7"><span class="mk">7</span><span class="mt"><b>Swap with a neighbour</b>Verify theirs; you can't identify them.<span class="mact">Act II</span></span></div>
@@ -151,19 +155,20 @@
 </header>
 
 <!-- ===================== ACT I ===================== -->
-<div class="actban"><span class="an">Act I</span><h2>Prove a fact about a secret</h2><span class="at">~10 min · missions 1-4</span></div>
+<div class="actban"><span class="an">Act I</span><h2>Prove a fact about a secret</h2><span class="at">~6 min · missions 1-4</span></div>
 
 <section class="step">
   <div class="step-tag"><span class="n">1</span> The problem</div>
   <h3 class="h">Age checks are honeypots today</h3>
   <p>France mandates age verification for some sites; eIDAS 2.0 requires EU member states to offer identity wallets. The obvious build - upload a photo of your ID - creates exactly the centralised document store that keeps getting breached. The EU Digital Identity Wallet's answer is a <b>zero-knowledge proof</b>: your device convinces a site that "the holder is over 18" while revealing <em>nothing else</em>. You are about to run the conceptual core of that mechanism, then push well past it.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "What a ZK proof is" &amp; "Terminology"</span>Prover, proof, verifier - and the six-term breadcrumb (Claim → Public x → Witness w → Constraint → Circuit C → Statement). The two boxes below are exactly x and w, live.</div>
   <div class="inputs-row">
     <div class="field private">
-      <label>Your age <span class="badge private">private</span><br><span class="sub">stays on your device, forever</span></label>
+      <label>Your age <span class="badge private">private</span><br><span class="sub">private input w - stays on your device, forever</span></label>
       <input id="age" type="number" min="0" max="130" value="24">
     </div>
     <div class="field">
-      <label>Required minimum <span class="badge public">public</span><br><span class="sub">the rule being checked</span></label>
+      <label>Required minimum <span class="badge public">public</span><br><span class="sub">public input x - the rule being checked</span></label>
       <input id="threshold" type="number" min="1" max="130" value="18">
     </div>
   </div>
@@ -177,7 +182,8 @@
 <section class="step">
   <div class="step-tag"><span class="n">2</span> Missions 1-3 · Prove &amp; verify</div>
   <h3 class="h">Generate the proof, then check it</h3>
-  <p>Your browser computes a witness and builds a <b>Groth16 proof</b> over the BN254 curve - the same proof system securing billions on public chains. No server: the prover is you.</p>
+  <p>Your browser computes a witness and builds a <b>Groth16 proof</b> over the BN254 curve - the same proof system securing billions on public chains. No server: you are the <b>prover</b>, and the <b>verifier</b> is this browser tab - on a blockchain it would be a smart contract.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Proof systems" &amp; "Interaction"</span>Groth16 is the row you're running from that trade-off table. Verify is the non-interactive check from the Interaction slide - one message, no back-and-forth, checkable by anyone, any time after.</div>
   <div class="predict" id="p1">
     <span class="pq">Prediction 1 - what does the verifier actually receive?</span>
     <button class="popt" data-p="p1" data-k="a">Your age, encrypted so only the website can read it</button>
@@ -199,6 +205,7 @@
     <div class="exp" id="againBox">
       <b class="eh">Mission 3 - prove the identical statement again.</b>
       Same age, same rule. Before clicking: will the second proof be byte-identical to the first?
+      <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>This is the zero-knowledge card in action - watch what stays constant between two proofs of the same fact, and what doesn't.</div>
       <br><button class="ghost" id="btnAgain">Prove the same thing again</button>
       <div class="status" id="againStatus"></div>
     </div>
@@ -209,6 +216,7 @@
   <div class="step-tag"><span class="n">3</span> Mission 4 · Attack</div>
   <h3 class="h">Three ways to cheat - all rejected</h3>
   <p>A security claim you cannot attack is one you cannot trust. Predict, then attack.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Attack A tests completeness and soundness directly - the cards that say true statements always prove, and false ones can't. You're about to watch both hold, live rather than assumed.</div>
   <div class="predict" id="p2">
     <span class="pq">Prediction 2 - set your age to 15 above and generate. What happens?</span>
     <button class="popt" data-p="p2" data-k="a">A proof is produced, but verification fails</button>
@@ -219,12 +227,12 @@
   <div class="exp"><b class="eh">Attack A - lie.</b> Set age to <code class="inline">15</code> (min 18) above and click Generate. Watch the outcome, then set a truthful age and generate again so the next two attacks have a valid proof to work on.</div>
   <div class="exp"><b class="eh">Attack B - forge.</b> Corrupt one byte of a valid proof, as an interceptor would.
     <br><button class="ghost" id="btnTamper" disabled>Flip one byte, then re-verify</button><div class="status" id="tamperStatus"></div></div>
-  <div class="exp"><b class="eh">Attack C - replay against another rule.</b> Verify your valid proof against a different minimum than it was made for.
+  <div class="exp"><b class="eh">Attack C - substitute the public input.</b> Verify your valid proof against a different minimum than it was made for.
     <br><button class="ghost" id="btnGoalpost" disabled>Re-verify against a different minimum</button><div class="status" id="goalpostStatus"></div></div>
 </section>
 
 <!-- ===================== ACT II ===================== -->
-<div class="actban"><span class="an">Act II</span><h2>Prove membership without identity</h2><span class="at">~12 min · missions 5-7</span></div>
+<div class="actban"><span class="an">Act II</span><h2>Prove membership without identity</h2><span class="at">~7 min · missions 5-7</span></div>
 
 <section class="step">
   <div class="step-tag"><span class="n">4</span> A different shape of statement</div>
@@ -234,14 +242,15 @@
     <div class="panel sees"><h5>Selective disclosure (eIDAS)</h5><p class="small">Prove you hold a credential from <em>some</em> EU member state - enough to access a service - without disclosing your nationality.</p></div>
     <div class="panel hidden-panel"><h5>Proof of innocence (Privacy Pools)</h5><p class="small">Prove your deposit is in the <em>screened, approved</em> set. You demonstrate membership of the clean set - not the absence of guilt, and not your identity.</p></div>
   </div>
+  <div class="theory"><span class="tk">↩ From the talk · "Two kinds of proof"</span>This is the "proof of knowledge → privacy" row: hiding the witness (which member) is exactly what buys the privacy in both panels above - and in the Freedom Tool and shielded-transfer case studies.</div>
   <p style="margin-top:14px">Below is a 16-member approved set (think: 16 EU states). Pick which member you are - <b>that choice is your secret</b> - and prove membership. The verifier will only ever see the set's root.</p>
   <div class="inputs-row">
     <div class="field private">
-      <label>You are <span class="badge private">private</span><br><span class="sub">your identity within the set - never revealed</span></label>
+      <label>You are <span class="badge private">private</span><br><span class="sub">your identity (private input w) within the set - never revealed</span></label>
       <select id="member"></select>
     </div>
     <div class="field">
-      <label>Set root <span class="badge public">public</span><br><span class="sub">the commitment everyone shares</span></label>
+      <label>Set root <span class="badge public">public</span><br><span class="sub">public input x - the commitment everyone shares</span></label>
       <input id="rootView" type="text" readonly style="font-size:14px">
     </div>
   </div>
@@ -281,6 +290,7 @@
   <div class="step-tag"><span class="n">6</span> Mission 7 · Swap with a neighbour</div>
   <h3 class="h">Anonymity set, made of humans</h3>
   <p>Export your membership proof and hand it to a neighbour. They verify it and learn you are a member of the set - <b>not which member</b>. You do the same with theirs. Two people, two proofs, one shared anonymity set, zero identities revealed.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Same zero-knowledge card as mission 3 - now tested by a sceptical human instead of the maths. Your neighbour holds the whole proof and still can't identify you.</div>
   <div class="two-col">
     <div class="panel"><h5>A · Export your membership proof</h5>
       <button class="ghost" id="btnExportMem" disabled>Copy my membership proof</button>
@@ -294,12 +304,13 @@
 </section>
 
 <!-- ===================== ACT III ===================== -->
-<div class="actban"><span class="an">Act III · CTF</span><h2>Break it</h2><span class="at">~15 min · missions 8-9</span></div>
+<div class="actban"><span class="an">Act III · CTF</span><h2>Break it</h2><span class="at">~8 min · missions 8-9</span></div>
 
 <section class="step">
   <div class="step-tag"><span class="n">7</span> Mission 8 · The challenge</div>
   <h3 class="h">A ZK proof is only as sound as its circuit</h3>
   <p>Everything so far assumed the circuit was written correctly. In the real world it often is not: <b>under-constraint</b> - a missing or loose constraint - is the single most common class of finding in ZK audits. Here is a circuit that is <em>supposed</em> to prove "age ≥ threshold" but has had its security removed. Read it, then defeat it.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Tooling"</span>This is the exact gap that slide named: "if the frontend omits a constraint, it proves the wrong statement - perfectly." You're about to be that missing constraint.</div>
   <pre class="codeblock" id="src_age_range_broken"></pre>
   <div class="ctf">
     <div class="goal">🚩 Goal: produce a proof that VERIFIES for the public statement "minimum = 18", while the true age is 15.</div>
@@ -323,6 +334,7 @@
   <div class="step-tag"><span class="n">8</span> Mission 9 · The fix</div>
   <h3 class="h">One line restores soundness</h3>
   <p>The secure version adds exactly one thing: a range check forcing <code class="inline">diff</code> into <code class="inline">[0, 2^8)</code>, so it cannot be a wrapped-around "negative". Send your winning exploit inputs to the fixed circuit and watch them fail.</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Num2Bits(8) is the soundness card made concrete - the one-line difference between "no efficient cheating prover can succeed" and the exploit you just ran.</div>
   <details><summary>Show the one-line difference (secure circuit)</summary><pre class="codeblock" id="src_age_range_secure"></pre></details>
   <button class="run" id="btnFix" disabled style="margin-top:16px">Replay my exploit on the fixed circuit</button>
   <div class="status" id="fixStatus"></div>
@@ -332,6 +344,7 @@
   <div class="step-tag"><span class="n">9</span> The honest fine print</div>
   <h3 class="h">Where the real fights are - and they're not all technical</h3>
   <p>Even a correctly written age circuit only proves you know <em>a</em> number ≥ 18, not that it's truly your age - production systems bind attributes to an <b>issuer signature</b> inside the circuit. And as mission 8 showed, correctness of the circuit is itself an open, human problem. A starter question per discipline:</p>
+  <div class="theory"><span class="tk">↩ From the talk · "Trusted setup"</span>The policy panel's ceremony question below is that slide's toxic-waste/MPC question, aimed at this exact circuit: today, one person - not a multi-party ceremony.</div>
   <div class="disc">
     <div class="panel"><h5>If you work in law</h5><p class="small">Your neighbour verified a proof about you in mission 7. Did they "process personal data" under the GDPR? Defend either answer.</p></div>
     <div class="panel"><h5>If you work in HCI</h5><p class="small">Mission 8 showed a valid-looking proof of a false statement. How would you communicate "this system is sound" to a user who cannot audit a circuit?</p></div>
@@ -455,7 +468,7 @@ $("btnAgain").addEventListener("click", async ()=>{
     const {proof,publicSignals}=await prove("age_check",ageInputs);
     const identical=JSON.stringify(proof)===first; const ok=await verify("age_check",publicSignals,proof);
     setStatus(st, identical?"err":"ok", identical?"Identical (tell the speaker!)":"Completely different bytes. Both valid.",
-      "Same inputs, same circuit - yet the two proofs share no coordinates, because proving is randomised. Second verifies: <b>"+ok+"</b>. Consequence: someone who has seen one of your proofs cannot recognise another as yours. Unlinkability falls out of the maths.");
+      "Same inputs, same circuit - yet the two proofs share no coordinates, because proving is randomised. Second verifies: <b>"+ok+"</b>. Consequence: someone who has seen one of your proofs cannot recognise another as yours. The limit: full unlinkability still depends on the deployment - public inputs, timing and metadata can re-link.");
     if(!identical)done(3);
   }catch(e){ setStatus(st,"err","Failed",String(e).slice(0,120)); }
   $("btnAgain").disabled=false;
