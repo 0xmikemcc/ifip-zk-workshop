@@ -25,7 +25,6 @@
     color: var(--accent); border-radius: 999px; font-size: 14px; font-weight: 600; }
   .actban { margin-top: 34px; padding: 8px 0; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
     display: flex; align-items: baseline; gap: 14px; }
-  .actban .an { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
   .actban h2 { font-size: 25px; }
   .actban .at { color: var(--muted); font-size: 15px; margin-left: auto; }
   section.step { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px 30px; margin-top: 22px; }
@@ -48,6 +47,8 @@
     border: 2px solid var(--line); border-radius: 10px; color: var(--ink); background: #fff; }
   .field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
   .field.private input, .field.private select { border-color: #d8b4fe; background: #fdfaff; }
+  .field .readout { font-size: 14px; font-family: var(--mono); padding: 12px 14px; border: 2px solid var(--line);
+    border-radius: 10px; background: #f4f6f9; color: var(--muted); word-break: break-all; }
   .badge { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
     padding: 2px 8px; border-radius: 5px; vertical-align: 2px; margin-left: 8px; }
   .badge.private { background: #f3e8ff; color: #7c3aed; } .badge.public { background: #dbeafe; color: #1d4ed8; }
@@ -69,6 +70,7 @@
   .verdict.err { background: var(--bad-soft); border: 2px solid var(--bad); }
   .verdict .word { font-size: 40px; font-weight: 800; } .verdict.ok .word { color: var(--good); } .verdict.err .word { color: var(--bad); }
   .verdict .why { margin-top: 6px; color: var(--muted); }
+  .verdict .call { display: inline-block; margin-top: 12px; padding: 4px 10px; border-radius: 6px; background: rgba(0,0,0,0.06); font-family: var(--mono); font-size: 13px; color: var(--ink); }
   pre.artifact { font-family: var(--mono); font-size: 12px; line-height: 1.5; background: #f4f6f9; border: 1px solid var(--line);
     border-radius: 10px; padding: 14px; margin-top: 12px; overflow: auto; max-height: 300px; white-space: pre-wrap; word-break: break-all; }
   .two-col { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 16px; }
@@ -79,10 +81,16 @@
   .exp b.eh { display: block; margin-bottom: 3px; }
   .callout { border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0;
     padding: 14px 18px; margin-top: 16px; font-size: 15.5px; }
-  .theory { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
-    padding: 9px 14px; margin-top: 14px; font-size: 14px; color: var(--muted); background: #fff; }
-  .theory .tk { display: block; font-family: var(--mono); font-size: 11px; font-weight: 800; letter-spacing: 0.05em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+  .mechgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .mechcol { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: 13.5px; line-height: 1.4; }
+  .mechcol.good { border-color: #bfe5cc; background: var(--good-soft); } .mechcol.bad { border-color: #f0c4c4; background: var(--bad-soft); }
+  .mechcol h6 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .mechcol.good h6 { color: var(--good); } .mechcol.bad h6 { color: var(--bad); }
+  .mechstep { padding: 5px 0; }
+  .mecharrow { text-align: center; color: var(--muted); font-size: 12px; line-height: 1; }
+  .mechcol .out { margin-top: 8px; font-weight: 800; text-align: center; padding: 6px; border-radius: 6px; font-size: 13px; }
+  .mechcol.good .out { background: var(--good); color: #fff; } .mechcol.bad .out { background: var(--bad); color: #fff; }
+  @media (max-width: 720px) { .mechgrid { grid-template-columns: 1fr; } }
   details { margin-top: 14px; } details summary { cursor: pointer; font-weight: 700; font-size: 15px; color: var(--accent); }
   .timing { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 8px; }
   footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
@@ -122,6 +130,9 @@
   .ctf input.long { font-family: var(--mono); font-size: 14px; width: 100%; padding: 9px 12px; border: 2px solid var(--line);
     border-radius: 8px; color: var(--ink); }
   .ctf input.long:focus { outline: none; border-color: var(--accent); }
+  input.small-num { font-family: var(--mono); font-size: 15px; width: 90px; padding: 6px 10px; border: 2px solid var(--line);
+    border-radius: 8px; color: var(--ink); vertical-align: middle; }
+  input.small-num:focus { outline: none; border-color: var(--accent); }
   .pgrid { display: grid; grid-template-columns: 110px 1fr; gap: 10px 14px; align-items: center; margin-top: 14px; }
   .pgrid label { font-size: 14px; font-weight: 700; }
   .prime { font-family: var(--mono); font-size: 12px; color: var(--muted); word-break: break-all; margin-top: 6px; }
@@ -131,37 +142,34 @@
 </style>
 </head>
 <body>
-<div id="pill">Missions 0 / 9</div>
+<div id="pill">Exercises 0 / 9</div>
 <div class="wrap">
 
 <header class="masthead">
   <div class="kicker">IFIP Summer School on Privacy and Identity Management · Leuven 2026 · hands-on session</div>
   <h1>Prove it without revealing it</h1>
-  <p class="lede">Three acts, nine missions, about 25 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
+  <p class="lede">Nine exercises, about 25 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
   <span class="offline-note">Everything runs locally. After the page loads, no network is needed and no data leaves your device.</span>
 
   <div class="missions" style="margin-top:24px">
-    <div class="mission" id="m1"><span class="mk">1</span><span class="mt"><b>Prove you're old enough</b>Range proof: age ≥ 18.<span class="mact">Act I</span></span></div>
-    <div class="mission" id="m2"><span class="mk">2</span><span class="mt"><b>Verify it</b>Check your own proof.<span class="mact">Act I</span></span></div>
-    <div class="mission" id="m3"><span class="mk">3</span><span class="mt"><b>Prove it twice</b>Same claim, different bytes.<span class="mact">Act I</span></span></div>
-    <div class="mission" id="m4"><span class="mk">4</span><span class="mt"><b>Attack the proof</b>Lie, forge, substitute the public input - all rejected.<span class="mact">Act I</span></span></div>
-    <div class="mission" id="m5"><span class="mk">5</span><span class="mt"><b>Prove set membership</b>"I'm in the approved set" - not which member.<span class="mact">Act II</span></span></div>
-    <div class="mission" id="m6"><span class="mk">6</span><span class="mt"><b>Watch what leaks</b>Two members, one indistinguishable proof.<span class="mact">Act II</span></span></div>
-    <div class="mission" id="m7"><span class="mk">7</span><span class="mt"><b>Swap with a neighbour</b>Verify theirs; you can't identify them.<span class="mact">Act II</span></span></div>
-    <div class="mission" id="m8"><span class="mk">8</span><span class="mt"><b>Break a broken circuit</b>Prove a 15-year-old is over 18.<span class="mact">Act III · CTF</span></span></div>
-    <div class="mission" id="m9"><span class="mk">9</span><span class="mt"><b>Confirm the fix</b>One line restores soundness.<span class="mact">Act III · CTF</span></span></div>
-  </div>
-  <p class="small muted" style="margin-top:12px">Prediction boxes (🔮) appear before the interesting moments. <b>Commit to a guess before you click</b> - being wrong is the productive outcome.</p>
-</header>
+    <div class="mission" id="m1"><span class="mk">1</span><span class="mt"><b>Prove you're old enough</b>Range proof: age ≥ 18.</span></div>
+    <div class="mission" id="m2"><span class="mk">2</span><span class="mt"><b>Verify it</b>Check your own proof.</span></div>
+    <div class="mission" id="m3"><span class="mk">3</span><span class="mt"><b>Prove it twice</b>Same claim, different bytes.</span></div>
+    <div class="mission" id="m4"><span class="mk">4</span><span class="mt"><b>Attack the proof</b>Lie, forge, substitute the public input - all rejected.</span></div>
+    <div class="mission" id="m5"><span class="mk">5</span><span class="mt"><b>Prove set membership</b>"I'm in the approved set" - not which member.</span></div>
+    <div class="mission" id="m6"><span class="mk">6</span><span class="mt"><b>Watch what leaks</b>Two members, one indistinguishable proof.</span></div>
+    <div class="mission" id="m7"><span class="mk">7</span><span class="mt"><b>Swap with a neighbour</b>Verify theirs; you can't identify them.</span></div>
+    <div class="mission" id="m8"><span class="mk">8</span><span class="mt"><b>Break a broken circuit</b>Prove a 15-year-old is over 18.</span></div>
+    <div class="mission" id="m9"><span class="mk">9</span><span class="mt"><b>Confirm the fix</b>One line restores soundness.</span></div>
+  </div></header>
 
 <!-- ===================== ACT I ===================== -->
-<div class="actban"><span class="an">Act I</span><h2>Prove a fact about a secret</h2><span class="at">~6 min · missions 1-4</span></div>
+<div class="actban"><h2>Prove a fact about a secret</h2></div>
 
 <section class="step">
   <div class="step-tag"><span class="n">1</span> The problem</div>
   <h3 class="h">Age checks are honeypots today</h3>
   <p>France mandates age verification for some sites; eIDAS 2.0 requires EU member states to offer identity wallets. The obvious build - upload a photo of your ID - creates exactly the centralised document store that keeps getting breached. The EU Digital Identity Wallet's answer is a <b>zero-knowledge proof</b>: your device convinces a site that "the holder is over 18" while revealing <em>nothing else</em>. You are about to run the conceptual core of that mechanism, then push well past it.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "What a ZK proof is" &amp; "Terminology"</span>Prover, proof, verifier - and the six-term breadcrumb (Claim → Public x → Witness w → Constraint → Circuit C → Statement). The two boxes below are exactly x and w, live.</div>
   <div class="inputs-row">
     <div class="field private">
       <label>Your age <span class="badge private">private</span><br><span class="sub">private input w - stays on your device, forever</span></label>
@@ -175,15 +183,14 @@
   <details>
     <summary>Show the rules being proved (the circuit, in the Circom language)</summary>
     <pre class="codeblock" id="src_age_check"></pre>
-    <div class="callout">The key line is <code class="inline">ok === 1</code>: it makes "age ≥ minimum" a <em>rule of the system</em>, not a claim. If the rule does not hold, no valid proof exists. Act III is about what happens when a circuit forgets a line like this.</div>
+    <div class="callout">The key line is <code class="inline">ok === 1</code>: it makes "age ≥ minimum" a <em>rule of the system</em>, not a claim. If the rule does not hold, no valid proof exists. The CTF exercise later is about what happens when a circuit forgets a line like this.</div>
   </details>
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">2</span> Missions 1-3 · Prove &amp; verify</div>
+  <div class="step-tag"><span class="n">2</span> Exercises 1-3 · Prove &amp; verify</div>
   <h3 class="h">Generate the proof, then check it</h3>
   <p>Your browser computes a witness and builds a <b>Groth16 proof</b> over the BN254 curve - the same proof system securing billions on public chains. No server: you are the <b>prover</b>, and the <b>verifier</b> is this browser tab - on a blockchain it would be a smart contract.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Proof systems" &amp; "Interaction"</span>Groth16 is the row you're running from that trade-off table. Verify is the non-interactive check from the Interaction slide - one message, no back-and-forth, checkable by anyone, any time after.</div>
   <div class="predict" id="p1">
     <span class="pq">Prediction 1 - what does the verifier actually receive?</span>
     <button class="popt" data-p="p1" data-k="a">Your age, encrypted so only the website can read it</button>
@@ -201,22 +208,24 @@
         <p class="small muted" style="margin-top:8px">Just the rule. Your age is in neither the proof nor the signals, and is not derivable from either.</p></div>
     </div>
     <button class="run" id="btnVerify" style="margin-top:16px">Verify the proof</button>
-    <div class="verdict" id="verdict"><div class="word" id="verdictWord"></div><div class="why" id="verdictWhy"></div></div>
+    <div class="verdict" id="verdict"><div class="word" id="verdictWord"></div><div class="why" id="verdictWhy"></div><div class="call" id="verdictCall"></div></div>
     <div class="exp" id="againBox">
-      <b class="eh">Mission 3 - prove the identical statement again.</b>
+      <b class="eh">Exercise 3 - prove the identical statement again.</b>
       Same age, same rule. Before clicking: will the second proof be byte-identical to the first?
-      <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>This is the zero-knowledge card in action - watch what stays constant between two proofs of the same fact, and what doesn't.</div>
       <br><button class="ghost" id="btnAgain">Prove the same thing again</button>
       <div class="status" id="againStatus"></div>
+      <div class="two-col" id="againCompare" style="display:none">
+        <div class="panel"><h5>First proof</h5><pre class="artifact" id="againFirst"></pre></div>
+        <div class="panel"><h5>Second proof (same inputs)</h5><pre class="artifact" id="againSecond"></pre></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">3</span> Mission 4 · Attack</div>
+  <div class="step-tag"><span class="n">3</span> Exercise 4 · Attack</div>
   <h3 class="h">Three ways to cheat - all rejected</h3>
   <p>A security claim you cannot attack is one you cannot trust. Predict, then attack.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Attack A tests completeness and soundness directly - the cards that say true statements always prove, and false ones can't. You're about to watch both hold, live rather than assumed.</div>
   <div class="predict" id="p2">
     <span class="pq">Prediction 2 - set your age to 15 above and generate. What happens?</span>
     <button class="popt" data-p="p2" data-k="a">A proof is produced, but verification fails</button>
@@ -225,14 +234,61 @@
     <div class="reveal"></div>
   </div>
   <div class="exp"><b class="eh">Attack A - lie.</b> Set age to <code class="inline">15</code> (min 18) above and click Generate. Watch the outcome, then set a truthful age and generate again so the next two attacks have a valid proof to work on.</div>
-  <div class="exp"><b class="eh">Attack B - forge.</b> Corrupt one byte of a valid proof, as an interceptor would.
-    <br><button class="ghost" id="btnTamper" disabled>Flip one byte, then re-verify</button><div class="status" id="tamperStatus"></div></div>
-  <div class="exp"><b class="eh">Attack C - substitute the public input.</b> Verify your valid proof against a different minimum than it was made for.
-    <br><button class="ghost" id="btnGoalpost" disabled>Re-verify against a different minimum</button><div class="status" id="goalpostStatus"></div></div>
+  <div class="exp"><b class="eh">Attack B - forge.</b> Edit the proof below yourself - change a digit, swap two numbers, anything - as an interceptor tampering in transit would, then verify it.
+    <textarea class="paste" id="tamperBox" placeholder="Generate a proof first (exercise 1), then edit it here."></textarea>
+    <br><button class="ghost" id="btnTamper" disabled>Verify my edited proof</button>
+    <span class="small muted" id="tamperHint" style="margin-left:10px">Generate and verify a proof above first - that's what unlocks this</span>
+    <div class="status" id="tamperStatus"></div></div>
+  <div class="exp"><b class="eh">Attack C - substitute the public input.</b> Verification never re-runs the circuit - so pick any minimum you like and re-check your same proof against it.
+    <br>Verify against minimum <input class="small-num" id="goalpostInput" type="number" value="21">
+    <button class="ghost" id="btnGoalpost" disabled style="margin-left:8px">Re-verify against that minimum</button>
+    <span class="small muted" id="goalpostHint" style="margin-left:10px">Generate and verify a proof above first - that's what unlocks this</span>
+    <div class="status" id="goalpostStatus"></div></div>
+  <details style="margin-top:16px">
+    <summary>Show why these actually fail (the mechanism behind VALID / INVALID)</summary>
+    <p class="small muted" style="margin-top:10px">Circom compiles the circuit into a system of polynomial constraints. A witness satisfies the circuit exactly when one specific polynomial divides evenly by another - that divisibility <em>is</em> "every constraint holds," just written algebraically. The proof (three curve points, A/B/C) is a cryptographic encoding of that computation; the verifier's pairing check can only balance if A, B and C were actually built from a genuine satisfying witness.</p>
+    <div class="mechgrid">
+      <div class="mechcol good">
+        <h6>Honest prover</h6>
+        <div class="mechstep">Witness: age 24 satisfies age ≥ 18</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">Every constraint holds - the polynomial divides evenly</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">A, B, C compute cleanly from that witness</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">Pairing check balances</div>
+        <div class="out">VALID</div>
+      </div>
+      <div class="mechcol bad">
+        <h6>Attack A · lie</h6>
+        <div class="mechstep">age 15 does not satisfy age ≥ 18</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">No assignment makes every constraint hold - the polynomial has a remainder</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">There is no valid A, B, C to compute</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">Nothing exists to send the verifier</div>
+        <div class="out">PROVING FAILS</div>
+      </div>
+      <div class="mechcol bad">
+        <h6>Attack B · forge</h6>
+        <div class="mechstep">Start from a genuine, valid A, B, C</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">Flip one byte of A</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">No longer the exact point the setup's secret blinding factors expect</div>
+        <div class="mecharrow">↓</div>
+        <div class="mechstep">Pairing check fails to balance</div>
+        <div class="out">INVALID</div>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:12px">Attack C fails for a related but different reason: it keeps a genuine A, B, C but swaps the public input, which changes the public term the verifier builds from it - so the equation checks a different statement entirely, and a proof for one statement doesn't satisfy another.</p>
+    <p class="small muted" style="margin-top:8px">One precision note: "can only pass" above means <em>an efficient prover succeeds only with negligible probability</em> - not a strict impossibility - and it assumes this circuit's one-time setup secret was destroyed, not retained (see the Trusted setup slide).</p>
+  </details>
 </section>
 
 <!-- ===================== ACT II ===================== -->
-<div class="actban"><span class="an">Act II</span><h2>Prove membership without identity</h2><span class="at">~7 min · missions 5-7</span></div>
+<div class="actban"><h2>Prove membership without identity</h2></div>
 
 <section class="step">
   <div class="step-tag"><span class="n">4</span> A different shape of statement</div>
@@ -242,17 +298,20 @@
     <div class="panel sees"><h5>Selective disclosure (eIDAS)</h5><p class="small">Prove you hold a credential from <em>some</em> EU member state - enough to access a service - without disclosing your nationality.</p></div>
     <div class="panel hidden-panel"><h5>Proof of innocence (Privacy Pools)</h5><p class="small">Prove your deposit is in the <em>screened, approved</em> set. You demonstrate membership of the clean set - not the absence of guilt, and not your identity.</p></div>
   </div>
-  <div class="theory"><span class="tk">↩ From the talk · "Two kinds of proof"</span>This is the "proof of knowledge → privacy" row: hiding the witness (which member) is exactly what buys the privacy in both panels above - and in the Freedom Tool and shielded-transfer case studies.</div>
-  <p style="margin-top:14px">Below is a 16-member approved set (think: 16 EU states). Pick which member you are - <b>that choice is your secret</b> - and prove membership. The verifier will only ever see the set's root.</p>
+  <p style="margin-top:14px">Below is a 16-member approved set (think: 16 EU states). Pick which member you are - <b>that choice is your secret</b> - and prove membership. The verifier will only ever see the set's root. Then pick a country that is <em>not</em> in the set and watch what happens when you try.</p>
   <div class="inputs-row">
     <div class="field private">
       <label>You are <span class="badge private">private</span><br><span class="sub">your identity (private input w) within the set - never revealed</span></label>
       <select id="member"></select>
     </div>
     <div class="field">
-      <label>Set root <span class="badge public">public</span><br><span class="sub">public input x - the commitment everyone shares</span></label>
-      <input id="rootView" type="text" readonly style="font-size:14px">
+      <label>Set root <span class="badge public">public</span><br><span class="sub">public input x - fixed by the set, not something you choose</span></label>
+      <div class="readout" id="rootView"></div>
     </div>
+  </div>
+  <div class="two-col" style="margin-top:14px">
+    <div class="panel"><h5>In the approved set (16)</h5><p class="small" id="inSetList"></p></div>
+    <div class="panel"><h5>Not in the approved set (11)</h5><p class="small" id="outSetList"></p><p class="small muted" style="margin-top:8px">All selectable above - try proving as one.</p></div>
   </div>
   <details>
     <summary>Show the membership circuit (Merkle inclusion over Poseidon)</summary>
@@ -261,7 +320,7 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">5</span> Missions 5-6 · Prove membership</div>
+  <div class="step-tag"><span class="n">5</span> Exercises 5-6 · Prove membership</div>
   <h3 class="h">Prove you're in the set</h3>
   <div class="predict" id="p3">
     <span class="pq">Prediction 3 - your membership proof, handed to a verifier, reveals...</span>
@@ -275,11 +334,11 @@
   <div id="memOut" style="display:none">
     <div class="two-col">
       <div class="panel sees"><h5>Public signals (what the verifier sees)</h5><pre class="artifact" id="memPublic"></pre></div>
-      <div class="panel hidden-panel"><h5>Your private witness (never sent)</h5><pre class="artifact" id="memPrivate"></pre></div>
+      <div class="panel"><h5>The proof (what travels with it)</h5><pre class="artifact" id="memProofJson"></pre><p class="small muted" id="memAbsence" style="margin-top:8px"></p></div>
     </div>
     <button class="run" id="btnVerifyMem" style="margin-top:16px">Verify my membership proof</button>
-    <div class="verdict" id="memVerdict"><div class="word" id="memWord"></div><div class="why" id="memWhy"></div></div>
-    <div class="exp"><b class="eh">Mission 6 - become a different member and prove again.</b>
+    <div class="verdict" id="memVerdict"><div class="word" id="memWord"></div><div class="why" id="memWhy"></div><div class="call" id="memCall"></div></div>
+    <div class="exp"><b class="eh">Exercise 6 - become a different member and prove again.</b>
       The public signal is the shared root. Change who you are above, prove again, and compare the public signals of the two proofs.
       <br><button class="ghost" id="btnMemCompare" disabled>Prove as whoever is selected now &amp; compare</button>
       <div class="status" id="memCompareStatus"></div></div>
@@ -287,14 +346,13 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">6</span> Mission 7 · Swap with a neighbour</div>
+  <div class="step-tag"><span class="n">6</span> Exercise 7 · Swap with a neighbour</div>
   <h3 class="h">Anonymity set, made of humans</h3>
   <p>Export your membership proof and hand it to a neighbour. They verify it and learn you are a member of the set - <b>not which member</b>. You do the same with theirs. Two people, two proofs, one shared anonymity set, zero identities revealed.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Same zero-knowledge card as mission 3 - now tested by a sceptical human instead of the maths. Your neighbour holds the whole proof and still can't identify you.</div>
   <div class="two-col">
     <div class="panel"><h5>A · Export your membership proof</h5>
       <button class="ghost" id="btnExportMem" disabled>Copy my membership proof</button>
-      <textarea class="paste" id="exportMemBox" readonly placeholder="Prove membership first (mission 5), then export."></textarea></div>
+      <textarea class="paste" id="exportMemBox" readonly placeholder="Prove membership first (exercise 5), then export."></textarea></div>
     <div class="panel sees"><h5>B · Verify a neighbour's</h5>
       <textarea class="paste" id="importMemBox" placeholder="Paste a neighbour's membership proof..."></textarea>
       <button class="ghost" id="btnImportMem">Verify their proof</button>
@@ -304,13 +362,12 @@
 </section>
 
 <!-- ===================== ACT III ===================== -->
-<div class="actban"><span class="an">Act III · CTF</span><h2>Break it</h2><span class="at">~8 min · missions 8-9</span></div>
+<div class="actban"><h2>Break it</h2></div>
 
 <section class="step">
-  <div class="step-tag"><span class="n">7</span> Mission 8 · The challenge</div>
+  <div class="step-tag"><span class="n">7</span> Exercise 8 · The challenge</div>
   <h3 class="h">A ZK proof is only as sound as its circuit</h3>
   <p>Everything so far assumed the circuit was written correctly. In the real world it often is not: <b>under-constraint</b> - a missing or loose constraint - is the single most common class of finding in ZK audits. Here is a circuit that is <em>supposed</em> to prove "age ≥ threshold" but has had its security removed. Read it, then defeat it.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Tooling"</span>This is the exact gap that slide named: "if the frontend omits a constraint, it proves the wrong statement - perfectly." You're about to be that missing constraint.</div>
   <pre class="codeblock" id="src_age_range_broken"></pre>
   <div class="ctf">
     <div class="goal">🚩 Goal: produce a proof that VERIFIES for the public statement "minimum = 18", while the true age is 15.</div>
@@ -331,23 +388,22 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">8</span> Mission 9 · The fix</div>
+  <div class="step-tag"><span class="n">8</span> Exercise 9 · The fix</div>
   <h3 class="h">One line restores soundness</h3>
   <p>The secure version adds exactly one thing: a range check forcing <code class="inline">diff</code> into <code class="inline">[0, 2^8)</code>, so it cannot be a wrapped-around "negative". Send your winning exploit inputs to the fixed circuit and watch them fail.</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Security properties"</span>Num2Bits(8) is the soundness card made concrete - the one-line difference between "no efficient cheating prover can succeed" and the exploit you just ran.</div>
   <details><summary>Show the one-line difference (secure circuit)</summary><pre class="codeblock" id="src_age_range_secure"></pre></details>
   <button class="run" id="btnFix" disabled style="margin-top:16px">Replay my exploit on the fixed circuit</button>
+  <span class="small muted" id="fixHint" style="margin-left:10px">Win exercise 8 first - your exploit inputs up there are what get replayed here</span>
   <div class="status" id="fixStatus"></div>
 </section>
 
 <section class="step">
   <div class="step-tag"><span class="n">9</span> The honest fine print</div>
   <h3 class="h">Where the real fights are - and they're not all technical</h3>
-  <p>Even a correctly written age circuit only proves you know <em>a</em> number ≥ 18, not that it's truly your age - production systems bind attributes to an <b>issuer signature</b> inside the circuit. And as mission 8 showed, correctness of the circuit is itself an open, human problem. A starter question per discipline:</p>
-  <div class="theory"><span class="tk">↩ From the talk · "Trusted setup"</span>The policy panel's ceremony question below is that slide's toxic-waste/MPC question, aimed at this exact circuit: today, one person - not a multi-party ceremony.</div>
+  <p>Even a correctly written age circuit only proves you know <em>a</em> number ≥ 18, not that it's truly your age - production systems bind attributes to an <b>issuer signature</b> inside the circuit. And as exercise 8 showed, correctness of the circuit is itself an open, human problem. A starter question per discipline:</p>
   <div class="disc">
-    <div class="panel"><h5>If you work in law</h5><p class="small">Your neighbour verified a proof about you in mission 7. Did they "process personal data" under the GDPR? Defend either answer.</p></div>
-    <div class="panel"><h5>If you work in HCI</h5><p class="small">Mission 8 showed a valid-looking proof of a false statement. How would you communicate "this system is sound" to a user who cannot audit a circuit?</p></div>
+    <div class="panel"><h5>If you work in law</h5><p class="small">Your neighbour verified a proof about you in exercise 7. Did they "process personal data" under the GDPR? Defend either answer.</p></div>
+    <div class="panel"><h5>If you work in HCI</h5><p class="small">Exercise 8 showed a valid-looking proof of a false statement. How would you communicate "this system is sound" to a user who cannot audit a circuit?</p></div>
     <div class="panel"><h5>If you work in policy</h5><p class="small">The keys here came from a ceremony run by one person. Who should run - and audit - the circuit and ceremony for 450 million EU citizens?</p></div>
   </div>
   <p style="margin-top:14px">These same primitives compose into the EUDI Wallet's <a href="https://github.com/eu-digital-identity-wallet/av-lib-android-zkp-age-icao" target="_blank" rel="noopener">age-proof library</a>, Swiss SWIYU selective disclosure, and the deployed privacy protocol we walk through next.</p>
@@ -378,6 +434,8 @@ const MERKLE = {"depth":4,"root":"1468830314486263706445854571999337287805112173
 const P = 21888242871839275222246405745257275088548364400416034343698204186575808495617n;
 // EU-state labels for the 16-member approved set (illustrative)
 const EU_LABELS = ["Austria","Belgium","Bulgaria","Croatia","Cyprus","Czechia","Denmark","Estonia","Finland","France","Germany","Greece","Hungary","Ireland","Italy","Latvia"];
+// the other 11 of the 27 EU member states - not part of this committed set, shown for contrast only
+const NOT_IN_SET = ["Lithuania","Luxembourg","Malta","Netherlands","Poland","Portugal","Romania","Slovakia","Slovenia","Spain","Sweden"];
 
 const $ = (id) => document.getElementById(id);
 function b64ToU8(b64){ const bin=atob(b64); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i); return u; }
@@ -398,8 +456,8 @@ for (const name of Object.keys(SOURCES)) { const el = $("src_" + name); if (el) 
 /* ---- missions ---- */
 const missions = new Set();
 function done(n){ if(missions.has(n))return; missions.add(n); $("m"+n).classList.add("done");
-  const pill=$("pill"); pill.textContent="Missions "+missions.size+" / 9";
-  if(missions.size===9){ pill.classList.add("all"); pill.textContent="Missions 9 / 9 🎉"; } }
+  const pill=$("pill"); pill.textContent="Exercises "+missions.size+" / 9";
+  if(missions.size===9){ pill.classList.add("all"); pill.textContent="Exercises 9 / 9 🎉"; } }
 
 /* ---- predictions ---- */
 const CORRECT = { p1:"b", p2:"b", p3:"b" };
@@ -435,6 +493,7 @@ $("btnProve").addEventListener("click", async ()=>{
   $("proofOut").style.display="none"; $("verdict").className="verdict";
   clearStatus($("tamperStatus")); clearStatus($("goalpostStatus")); clearStatus($("againStatus"));
   ageProof=null; agePublic=null; $("btnTamper").disabled=true; $("btnGoalpost").disabled=true;
+  $("tamperHint").style.display="inline"; $("goalpostHint").style.display="inline";
   if(!(age>=0&&age<=130)||!(threshold>=1&&threshold<=130)){ setStatus(st,"err","Use realistic numbers","Age 0-130, minimum 1-130 keeps us inside the circuit's 8-bit range."); return; }
   $("btnProve").disabled=true; setStatus(st,"busy","Proving...","Computing the witness and building the Groth16 proof.");
   const t0=performance.now();
@@ -457,43 +516,71 @@ $("btnVerify").addEventListener("click", async ()=>{
   if(!ageProof)return; const t0=performance.now();
   const ok=await verify("age_check",agePublic,ageProof); const ms=Math.max(1,Math.round(performance.now()-t0));
   setVerdict($("verdict"),$("verdictWord"),$("verdictWhy"),ok,ok?"VALID":"INVALID",
-    ok?"Verified in "+ms+" ms. The verifier knows the statement is true - and nothing else.":"Does not check out.");
-  $("btnTamper").disabled=!ok; $("btnGoalpost").disabled=!ok; if(ok)done(2);
+    ok?"<b>Verified in "+ms+" ms.</b> Checked: does this proof satisfy “age ≥ "+agePublic[0]+"”? The verifier tested the proof's curve points against that public rule and the fixed verification key - a constant algebraic check, not a re-run of the comparison. It can only pass if a real witness (an actual age ≥ "+agePublic[0]+") was used to build the proof - that's what makes “VALID” trustworthy here, not just a label.":"Does not check out.");
+  $("verdictCall").textContent='snarkjs.groth16.verify(vkey, ["'+agePublic[0]+'"], proof) → '+ok;
+  $("btnTamper").disabled=!ok; $("btnGoalpost").disabled=!ok;
+  $("tamperHint").style.display=ok?"none":"inline"; $("goalpostHint").style.display=ok?"none":"inline";
+  if(ok){ $("tamperBox").value=JSON.stringify(ageProof,null,2); }
+  if(ok)done(2);
 });
 $("btnAgain").addEventListener("click", async ()=>{
   if(!ageInputs||!ageProof)return; const st=$("againStatus"); $("btnAgain").disabled=true;
   setStatus(st,"busy","Proving the identical statement again...");
   try{
-    const first=JSON.stringify(ageProof);
+    const firstProof=ageProof; const first=JSON.stringify(firstProof);
     const {proof,publicSignals}=await prove("age_check",ageInputs);
     const identical=JSON.stringify(proof)===first; const ok=await verify("age_check",publicSignals,proof);
     setStatus(st, identical?"err":"ok", identical?"Identical (tell the speaker!)":"Completely different bytes. Both valid.",
       "Same inputs, same circuit - yet the two proofs share no coordinates, because proving is randomised. Second verifies: <b>"+ok+"</b>. Consequence: someone who has seen one of your proofs cannot recognise another as yours. The limit: full unlinkability still depends on the deployment - public inputs, timing and metadata can re-link.");
-    if(!identical)done(3);
+    if(!identical){
+      $("againFirst").textContent=JSON.stringify(firstProof,null,2);
+      $("againSecond").textContent=JSON.stringify(proof,null,2);
+      $("againCompare").style.display="flex";
+      done(3);
+    }
   }catch(e){ setStatus(st,"err","Failed",String(e).slice(0,120)); }
   $("btnAgain").disabled=false;
 });
 $("btnTamper").addEventListener("click", async ()=>{
-  if(!ageProof)return; const st=$("tamperStatus");
-  const t=JSON.parse(JSON.stringify(ageProof)); t.pi_a[0]=(BigInt(t.pi_a[0])+1n).toString();
-  const ok=await verify("age_check",agePublic,t);
-  setStatus(st, ok?"err":"ok", ok?"Unexpected - tell the speaker":"Rejected",
-    "One coordinate changed by +1. Verification: <b>"+(ok?"valid":"invalid")+"</b>. There is no such thing as a slightly wrong proof."); if(!ok)done(4);
+  if(!ageProof)return; const st=$("tamperStatus"); let t;
+  try{ t=JSON.parse($("tamperBox").value); }
+  catch(e){ setStatus(st,"err","Not valid JSON","Edit a number, not the punctuation - keep it valid JSON. Resetting to the original."); $("tamperBox").value=JSON.stringify(ageProof,null,2); return; }
+  const unchanged=JSON.stringify(t)===JSON.stringify(ageProof);
+  let ok; try{ ok=await verify("age_check",agePublic,t); }catch(e){ ok=false; }
+  setStatus(st, (ok&&!unchanged)?"err":"ok",
+    unchanged?"Unchanged":(ok?"Unexpected - tell the speaker":"Rejected"),
+    unchanged?"This is still byte-for-byte the original proof. Change a digit somewhere in pi_a, pi_b or pi_c, then verify again."
+      :"Your edited proof, verified: <b>"+(ok?"valid":"invalid")+"</b>. There is no such thing as a slightly wrong proof - any change to any coordinate breaks it. The box above is reset to the original valid proof, ready for your next edit.");
+  if(!unchanged)$("tamperBox").value=JSON.stringify(ageProof,null,2);
+  if(!ok&&!unchanged)done(4);
 });
 $("btnGoalpost").addEventListener("click", async ()=>{
-  if(!ageProof)return; const st=$("goalpostStatus"); const real=agePublic[0]; const wrong=(real==="21")?"25":"21";
-  const ok=await verify("age_check",[wrong],ageProof);
+  if(!ageProof)return; const st=$("goalpostStatus"); const real=agePublic[0];
+  const wrong=$("goalpostInput").value.trim();
+  if(wrong===""){ setStatus(st,"err","Enter a minimum","Type a number to verify against."); return; }
+  if(wrong===real){ setStatus(st,"err","Same as the original","Pick a different number to actually substitute the public input."); return; }
+  let ok; try{ ok=await verify("age_check",[wrong],ageProof); }catch(e){ ok=false; }
   setStatus(st, ok?"err":"ok", ok?"Unexpected - tell the speaker":"Rejected",
-    "Proof made for “minimum "+real+"”, checked against “minimum "+wrong+"”. Verification: <b>"+(ok?"valid":"invalid")+"</b>. A proof is bound to its exact public statement."); if(!ok)done(4);
+    "Proof made for “minimum "+real+"”, checked against “minimum "+wrong+"”. Verification: <b>"+(ok?"valid":"invalid")+"</b>. A proof is bound to its exact public statement - and since this check never re-runs the circuit, that holds for literally any number you type here, not just this one."); if(!ok)done(4);
 });
 
 /* ================= ACT II ================= */
 const sel=$("member");
-MERKLE.members.forEach(m=>{ const o=document.createElement("option"); o.value=m.index; o.textContent=EU_LABELS[m.index]||("Member #"+m.index); sel.appendChild(o); });
+const gIn=document.createElement("optgroup"); gIn.label="In the approved set";
+MERKLE.members.forEach(m=>{ const o=document.createElement("option"); o.value=m.index; o.textContent=EU_LABELS[m.index]||("Member #"+m.index); gIn.appendChild(o); });
+const gOut=document.createElement("optgroup"); gOut.label="NOT in the set - try one";
+NOT_IN_SET.forEach((n,i)=>{ const o=document.createElement("option"); o.value=16+i; o.textContent=n+" ✗"; gOut.appendChild(o); });
+sel.appendChild(gIn); sel.appendChild(gOut);
 sel.value="3";
-$("rootView").value = "0x"+BigInt(MERKLE.root).toString(16).slice(0,20)+"...";
+$("rootView").textContent = "0x"+BigInt(MERKLE.root).toString(16).slice(0,20)+"...";
+$("inSetList").textContent = EU_LABELS.join(", ");
+$("outSetList").textContent = NOT_IN_SET.join(", ");
 let memProof=null, memPublic=null, memProvedIdx=null, firstMemPublic=null;
-function memInputFor(idx){ const m=MERKLE.members[idx]; return {leaf:m.leaf, pathElements:m.pathElements, pathIndices:m.pathIndices, root:MERKLE.root}; }
+function fakeLeaf(name){ let h=0n; for(const ch of name) h=(h*131n+BigInt(ch.charCodeAt(0)))%P; return h.toString(); }
+function memInputFor(idx){
+  if(idx>=16){ const m=MERKLE.members[0]; return {leaf:fakeLeaf(NOT_IN_SET[idx-16]), pathElements:m.pathElements, pathIndices:m.pathIndices, root:MERKLE.root}; }
+  const m=MERKLE.members[idx]; return {leaf:m.leaf, pathElements:m.pathElements, pathIndices:m.pathIndices, root:MERKLE.root};
+}
 $("btnProveMem").addEventListener("click", async ()=>{
   const idx=parseInt(sel.value,10); const st=$("memStatus"); $("btnProveMem").disabled=true;
   setStatus(st,"busy","Proving membership...","Hashing your leaf up the Merkle path and proving it reaches the public root.");
@@ -503,26 +590,37 @@ $("btnProveMem").addEventListener("click", async ()=>{
     revealPrediction("p3");
     setStatus(st,"ok","Membership proved","You proved you are one of the "+MERKLE.members.length+" members - without exposing which.");
     $("memPublic").textContent=JSON.stringify({"set root":publicSignals[0]},null,2);
-    $("memPrivate").textContent=JSON.stringify({"who you are":EU_LABELS[idx]||("member #"+idx),"your leaf":MERKLE.members[idx].leaf,"path":"(hidden)"},null,2);
+    $("memProofJson").textContent=JSON.stringify(proof,null,2);
+    const travels=JSON.stringify({proof,publicSignals});
+    $("memAbsence").innerHTML=travels.includes(MERKLE.members[idx].leaf)
+      ?"⚠ Unexpected: your leaf value appears in the artifact - tell the speaker."
+      :"✓ Checked just now: your leaf value - the secret identifying which member you are - appears nowhere in the proof or the public signals. Only this browser tab ever knew your selection, and it forgets on reload.";
     $("memOut").style.display="block"; $("btnExportMem").disabled=false; $("btnMemCompare").disabled=false; done(5);
-  }catch(e){ setStatus(st,"err","Failed",String(e).slice(0,140)); }
+  }catch(e){
+    if(idx>=16) setStatus(st,"err","No proof possible - not in the set","The selected country's leaf is not one of the 16 committed to in this root. Hashing it up the tree lands on a different root, so the circuit's final constraint <code class='inline'>root === computed root</code> has no solution - witness generation fails before any proof exists. Same shape as lying about your age in Attack A: not a rejected proof, but nothing to send at all. (Notice this message doesn't name your selection either - it stays private everywhere on this page.)");
+    else setStatus(st,"err","Failed",String(e).slice(0,140));
+  }
   $("btnProveMem").disabled=false;
 });
 $("btnVerifyMem").addEventListener("click", async ()=>{
   if(!memProof)return; const ok=await verify("membership",memPublic,memProof);
   setVerdict($("memVerdict"),$("memWord"),$("memWhy"),ok,ok?"VALID":"INVALID",
-    ok?"The verifier learns: a member of the set with this root. It cannot learn which one.":"Does not check out.");
+    ok?"Same algebraic check as exercise 2, run against the membership circuit's verification key. It passes only because a real path from some leaf up to this root exists in the witness. The verifier learns: a member of the set with this root - never which one.":"Does not check out.");
+  $("memCall").textContent='snarkjs.groth16.verify(vkey, ["'+String(memPublic[0]).slice(0,10)+'..."], proof) → '+ok;
 });
 $("btnMemCompare").addEventListener("click", async ()=>{
   const idx=parseInt(sel.value,10); const st=$("memCompareStatus"); $("btnMemCompare").disabled=true;
-  setStatus(st,"busy","Proving as "+(EU_LABELS[idx]||("member #"+idx))+"...");
+  setStatus(st,"busy","Proving again as the newly selected member...");
   try{
     const {proof,publicSignals}=await prove("membership",memInputFor(idx));
     const same=publicSignals[0]===firstMemPublic;
     setStatus(st, same?"ok":"err", same?"Same public signal, different member.":"Public signals differ (unexpected - tell the speaker)",
-      "This proof is by <b>"+(EU_LABELS[idx]||("member #"+idx))+"</b>; the public signal is still the shared root <code class='inline'>"+String(publicSignals[0]).slice(0,12)+"...</code>. To any verifier these proofs are interchangeable - that indistinguishable pile is your anonymity set. In Privacy Pools it is the difference between 'a screened user withdrew' and 'this person withdrew'.");
+      "This second proof is by whoever you just selected - <b>nothing in it says who</b>; the public signal is still the shared root <code class='inline'>"+String(publicSignals[0]).slice(0,12)+"...</code>. To any verifier these proofs are interchangeable - that indistinguishable pile is your anonymity set. In Privacy Pools it is the difference between 'a screened user withdrew' and 'this person withdrew'.");
     memProof=proof; memPublic=publicSignals; memProvedIdx=idx; if(same)done(6);
-  }catch(e){ setStatus(st,"err","Failed",String(e).slice(0,140)); }
+  }catch(e){
+    if(idx>=16) setStatus(st,"err","No proof possible - not in the set","The selected country is not in the committed set - witness generation fails, exactly as in exercise 5. Pick a member to compare proofs.");
+    else setStatus(st,"err","Failed",String(e).slice(0,140));
+  }
   $("btnMemCompare").disabled=false;
 });
 $("btnExportMem").addEventListener("click", async ()=>{
@@ -579,8 +677,8 @@ $("btnCtfProve").addEventListener("click", async ()=>{
     const exploit = ok && age<th && publicSignals[0]===th.toString();
     if(exploit){
       setVerdict($("ctfVerdict"),$("ctfWord"),$("ctfWhy"),true,"EXPLOITED 🚩",
-        "You just produced a <b>valid</b> proof that a "+age+"-year-old satisfies “minimum "+th+"”. The proof system did its job perfectly - it faithfully proved a statement about a circuit whose constraints do not actually mean what the name claims. This is under-constraint, the #1 real ZK bug. Now do mission 9.");
-      ctfWon=true; $("btnFix").disabled=false; done(8);
+        "You just produced a <b>valid</b> proof that a "+age+"-year-old satisfies “minimum "+th+"”. The proof system did its job perfectly - it faithfully proved a statement about a circuit whose constraints do not actually mean what the name claims. This is under-constraint, the #1 real ZK bug. Now do exercise 9.");
+      ctfWon=true; $("btnFix").disabled=false; $("fixHint").style.display="none"; done(8);
     } else if(ok){
       setVerdict($("ctfVerdict"),$("ctfWord"),$("ctfWhy"),true,"VALID (honest)",
         "This verifies, but age "+age+" ≥ "+th+" is actually true - so it's not yet the exploit. The goal is a valid proof while age &lt; threshold. Try age = 15, threshold = 18.");
@@ -593,16 +691,23 @@ $("btnCtfProve").addEventListener("click", async ()=>{
   updateCalc();
 });
 $("btnFix").addEventListener("click", async ()=>{
-  const st=$("fixStatus"); const age=$("ctfAge").value.trim(), th=$("ctfTh").value.trim(), diff=fieldMod(BigInt($("ctfDiff").value.trim())).toString();
-  $("btnFix").disabled=true; setStatus(st,"busy","Replaying the exploit on the fixed circuit...");
+  const st=$("fixStatus"); let age,th,diff;
+  try{ age=BigInt($("ctfAge").value.trim()); th=BigInt($("ctfTh").value.trim()); diff=fieldMod(BigInt($("ctfDiff").value.trim())); }
+  catch(e){ setStatus(st,"err","Enter integers","Set age, threshold and diff in the panel above first."); return; }
+  const holds=fieldMod(th+diff)===fieldMod(age);
+  $("btnFix").disabled=true; setStatus(st,"busy","Replaying these inputs on the fixed circuit...");
   try{
-    await prove("age_range_secure",{age,threshold:th,diff});
-    setStatus(st,"err","Unexpected: the fixed circuit accepted it","Tell the speaker - this should not happen.");
-    $("btnFix").disabled=false;
+    await prove("age_range_secure",{age:age.toString(),threshold:th.toString(),diff:diff.toString()});
+    if(age<th) setStatus(st,"err","Unexpected: the fixed circuit accepted it","Tell the speaker - this should not happen.");
+    else setStatus(st,"ok","Accepted - honest inputs prove fine","age ≥ threshold and diff fits in 8 bits, so the fixed circuit is satisfied. The one-line fix only kills the wrapped-around exploit: set age 15, threshold 18, diff = p − 3 above and replay to watch it fail.");
   }catch(e){
-    setStatus(st,"ok","Rejected by the fixed circuit ✓","Same inputs, one extra line - <code class='inline'>Num2Bits(8)</code> forces diff into [0, 255], and p − 3 does not fit in 8 bits, so no witness exists. That single range check is the entire difference between a sound proof and a worthless one. It is also exactly the kind of line a hurried developer omits - which is why 'who audits the circuit' is the load-bearing question for any national identity system.");
-    done(9);
+    if(!holds) setStatus(st,"err","No witness - equation not satisfied","These inputs don't even satisfy <code class='inline'>age === threshold + diff</code> mod p, so witness generation fails on the linear constraint - the range check never comes into play. Make the calculator above go green, then replay.");
+    else{
+      setStatus(st,"ok","Rejected by the fixed circuit ✓","Same inputs, one extra line - <code class='inline'>Num2Bits(8)</code> forces diff into [0, 255], and a wrapped-around “negative” like p − 3 does not fit in 8 bits, so no witness exists. That single range check is the entire difference between a sound proof and a worthless one. It is also exactly the kind of line a hurried developer omits - which is why 'who audits the circuit' is the load-bearing question for any national identity system.");
+      done(9);
+    }
   }
+  $("btnFix").disabled=false;
 });
 </script>
 </body>
