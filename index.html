@@ -142,13 +142,13 @@
 </style>
 </head>
 <body>
-<div id="pill">Exercises 0 / 8</div>
+<div id="pill">Exercises 0 / 9</div>
 <div class="wrap">
 
 <header class="masthead">
   <div class="kicker">IFIP Summer School on Privacy and Identity Management · Leuven 2026 · hands-on session</div>
   <h1>Prove it without revealing it</h1>
-  <p class="lede">Eight exercises, about 25 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
+  <p class="lede">Nine exercises, about 25 minutes. You start by proving you are old enough; you finish by <em>breaking</em> a real zero-knowledge system with your own hands. All in this tab. Nothing you type ever leaves your device.</p>
   <span class="offline-note">Everything runs locally. After the page loads, no network is needed and no data leaves your device.</span>
 
   <div class="missions" style="margin-top:24px">
@@ -160,6 +160,7 @@
     <div class="mission" id="m6"><span class="mk">6</span><span class="mt"><b>Watch what leaks</b>Two members, one indistinguishable proof.</span></div>
     <div class="mission" id="m7"><span class="mk">7</span><span class="mt"><b>Swap with a neighbour</b>Verify theirs; you can't identify them.</span></div>
     <div class="mission" id="m8"><span class="mk">8</span><span class="mt"><b>Break a broken circuit</b>Prove a 15-year-old is over 18.</span></div>
+    <div class="mission" id="m9"><span class="mk">9</span><span class="mt"><b>Confirm the fix</b>One line restores soundness.</span></div>
   </div></header>
 
 <!-- ===================== ACT I ===================== -->
@@ -387,15 +388,13 @@
 </section>
 
 <section class="step">
-  <div class="step-tag"><span class="n">8</span> The honest fine print</div>
-  <h3 class="h">Where the real fights are - and they're not all technical</h3>
-  <p>Even a correctly written age circuit only proves you know <em>a</em> number ≥ 18, not that it's truly your age - production systems bind attributes to an <b>issuer signature</b> inside the circuit. And as exercise 8 showed, correctness of the circuit is itself an open, human problem. A starter question per discipline:</p>
-  <div class="disc">
-    <div class="panel"><h5>If you work in law</h5><p class="small">Your neighbour verified a proof about you in exercise 7. Did they "process personal data" under the GDPR? Defend either answer.</p></div>
-    <div class="panel"><h5>If you work in HCI</h5><p class="small">In exercise 8 you made a flawless green VALID vouch for a false statement. The cryptography held - the circuit was the lie, and no interface could tell the difference. Write the honest caption for a verification tick. Would any product team ship your sentence?</p></div>
-    <div class="panel"><h5>If you work in policy</h5><p class="small">Your exercise-4 forgery failed only because you don't hold this setup's toxic waste - whoever does can mint green ticks for lies, undetectably. These keys came from a one-laptop ceremony with no witnesses. At 450-million-citizen scale: who runs it, who audits it - or do you mandate ceremony-free systems?</p></div>
-  </div>
-  <p style="margin-top:14px">These same primitives compose into the EUDI Wallet's <a href="https://github.com/eu-digital-identity-wallet/av-lib-android-zkp-age-icao" target="_blank" rel="noopener">age-proof library</a>, Swiss SWIYU selective disclosure, and the deployed privacy protocol we walk through next.</p>
+  <div class="step-tag"><span class="n">8</span> Exercise 9 · The fix</div>
+  <h3 class="h">One line restores soundness</h3>
+  <p>The secure version adds exactly one thing: a range check forcing <code class="inline">diff</code> into <code class="inline">[0, 2^8)</code>, so it cannot be a wrapped-around "negative". Send your winning exploit inputs to the fixed circuit and watch them fail.</p>
+  <details><summary>Show the one-line difference (secure circuit)</summary><pre class="codeblock" id="src_age_range_secure"></pre></details>
+  <button class="run" id="btnFix" disabled style="margin-top:16px">Replay my exploit on the fixed circuit</button>
+  <span class="small muted" id="fixHint" style="margin-left:10px">Win exercise 8 first - your exploit inputs up there are what get replayed here</span>
+  <div class="status" id="fixStatus"></div>
 </section>
 
 <footer>
@@ -445,8 +444,8 @@ for (const name of Object.keys(SOURCES)) { const el = $("src_" + name); if (el) 
 /* ---- missions ---- */
 const missions = new Set();
 function done(n){ if(missions.has(n))return; missions.add(n); $("m"+n).classList.add("done");
-  const pill=$("pill"); pill.textContent="Exercises "+missions.size+" / 8";
-  if(missions.size===8){ pill.classList.add("all"); pill.textContent="Exercises 8 / 8 🎉"; } }
+  const pill=$("pill"); pill.textContent="Exercises "+missions.size+" / 9";
+  if(missions.size===9){ pill.classList.add("all"); pill.textContent="Exercises 9 / 9 🎉"; } }
 
 /* ---- predictions ---- */
 const CORRECT = { p1:"b", p2:"b", p3:"b" };
@@ -664,8 +663,8 @@ $("btnCtfProve").addEventListener("click", async ()=>{
     const exploit = ok && age<th && publicSignals[0]===th.toString();
     if(exploit){
       setVerdict($("ctfVerdict"),$("ctfWord"),$("ctfWhy"),true,"EXPLOITED 🚩",
-        "You just produced a <b>valid</b> proof that a "+age+"-year-old satisfies “minimum "+th+"”. The proof system did its job perfectly - it faithfully proved a statement about a circuit whose constraints do not actually mean what the name claims. This is under-constraint, the #1 real ZK bug. The fix is a single line - a <code class='inline'>Num2Bits(8)</code> range check forcing diff into [0, 255], so a wrapped-around “negative” like p − 3 can't sneak through - and it is exactly the kind of line a hurried developer omits. That is why 'who audits the circuit' is the load-bearing question for any national identity system.");
-      done(8);
+        "You just produced a <b>valid</b> proof that a "+age+"-year-old satisfies “minimum "+th+"”. The proof system did its job perfectly - it faithfully proved a statement about a circuit whose constraints do not actually mean what the name claims. This is under-constraint, the #1 real ZK bug. Now do exercise 9.");
+      $("btnFix").disabled=false; $("fixHint").style.display="none"; done(8);
     } else if(ok){
       setVerdict($("ctfVerdict"),$("ctfWord"),$("ctfWhy"),true,"VALID (honest)",
         "This verifies, but age "+age+" ≥ "+th+" is actually true - so it's not yet the exploit. The goal is a valid proof while age &lt; threshold. Try age = 15, threshold = 18.");
@@ -676,6 +675,25 @@ $("btnCtfProve").addEventListener("click", async ()=>{
     setStatus(st,"err","Witness generation failed","The equation age === threshold + diff is not satisfied by these values, so there is no witness. Use the live calculator to get it green first.");
   }
   updateCalc();
+});
+$("btnFix").addEventListener("click", async ()=>{
+  const st=$("fixStatus"); let age,th,diff;
+  try{ age=BigInt($("ctfAge").value.trim()); th=BigInt($("ctfTh").value.trim()); diff=fieldMod(BigInt($("ctfDiff").value.trim())); }
+  catch(e){ setStatus(st,"err","Enter integers","Set age, threshold and diff in the panel above first."); return; }
+  const holds=fieldMod(th+diff)===fieldMod(age);
+  $("btnFix").disabled=true; setStatus(st,"busy","Replaying these inputs on the fixed circuit...");
+  try{
+    await prove("age_range_secure",{age:age.toString(),threshold:th.toString(),diff:diff.toString()});
+    if(age<th) setStatus(st,"err","Unexpected: the fixed circuit accepted it","Tell the speaker - this should not happen.");
+    else setStatus(st,"ok","Accepted - honest inputs prove fine","age ≥ threshold and diff fits in 8 bits, so the fixed circuit is satisfied. The one-line fix only kills the wrapped-around exploit: set age 15, threshold 18, diff = p − 3 above and replay to watch it fail.");
+  }catch(e){
+    if(!holds) setStatus(st,"err","No witness - equation not satisfied","These inputs don't even satisfy <code class='inline'>age === threshold + diff</code> mod p, so witness generation fails on the linear constraint - the range check never comes into play. Make the calculator above go green, then replay.");
+    else{
+      setStatus(st,"ok","Rejected by the fixed circuit ✓","Same inputs, one extra line - <code class='inline'>Num2Bits(8)</code> forces diff into [0, 255], and a wrapped-around “negative” like p − 3 does not fit in 8 bits, so no witness exists. That single range check is the entire difference between a sound proof and a worthless one. It is also exactly the kind of line a hurried developer omits - which is why 'who audits the circuit' is the load-bearing question for any national identity system.");
+      done(9);
+    }
+  }
+  $("btnFix").disabled=false;
 });
 </script>
 </body>
